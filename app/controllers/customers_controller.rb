@@ -6,6 +6,7 @@ class CustomersController < ApplicationController
   end
 
   def upload
+    LeadsWorker.perform_async(params[:leads].path)
     CSV.foreach(params[:leads].path, headers: true) do |lead|
       Customer.create(email: lead[0], first_name: lead[1], last_name: lead[2])
     end
